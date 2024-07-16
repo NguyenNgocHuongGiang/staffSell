@@ -1,0 +1,12 @@
+#myNotification {
+    display: none;
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 5px;
+    z-index: 9999; /* Đặt z-index để đảm bảo nằm trên cùng */
+}

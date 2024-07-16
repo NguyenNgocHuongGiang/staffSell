@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width= device-width, initial-scale=1.0">
+    <!-- Bootstrap SCS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <link rel="icon" href="https://pos.nvnstatic.net/img/logo/favicon.svg" type="image/x-icon"> -->
+    <title>Bán hàng</title>
+    <link rel="stylesheet" href="../public/css/notifcation.css" type="text/css" />
+</head>
+<style>
+    /* width */
+    .scrollListProduct::-webkit-scrollbar {
+        width: 20px;
+    }
+
+    /* Track */
+    .scrollListProduct::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    .scrollListProduct::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    .scrollListProduct::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    .scrollListProduct {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    /* ---------------------------- */
+    #boxPayment::-webkit-scrollbar {
+        width: 20px;
+    }
+
+    /* Track */
+    #boxPayment::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    #boxPayment::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    #boxPayment::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    #boxPayment {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+</style>
+
+<body>
+    <div id="myNotification">thông báo!</div>
+    <header>
+        <nav class=" navbar navbar-expand-lg fixed-top navHeader navbar-dark bg-dark"
+            style="background-color: black !important;">
+            <div class="container">
+                <a class="navbar-brand logo" href="/"><span class="text-warning">SELL</span>PHONE</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/product_user">Sản phẩm</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <ul class="navbar-nav">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle nameUser" data-bs-toggle="dropdown" href="#"
+                                style="color: rgb(255, 255, 255); list-style: none; text-decoration: none;">
+                                <%= user.email %>
+                                    <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" style="padding: 20px;">
+                                <li><a href="/profile"
+                                        style="color: rgb(0, 0, 0); list-style: none; text-decoration: none;">Tài
+                                        khoản</a>
+                                </li>
+                                <li><a href="#" style="color: black; list-style: none;"
+                                        data-target="#changePasswordModal" data-toggle="modal" id="changePassword">Đổi
+                                        mật khẩu</a></li>
+                                <li><a href="/logout"
+                                        style="color: black; list-style: none; text-decoration: none;">Đăng
+                                        xuất</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="page-content" style="margin-top: 80px;">
+        <div class="content-wrapper">
+            <div class="container">
+                <div id="boxHeader" class="row">
+                    <div id="boxSearch1" class="input-group col-12 col-xl-7">
+                        <input type="search" class="form-control rounded" placeholder="Tìm kiếm theo tên hoặc mã vạch"
+                            aria-label="Search" aria-describedby="search-addon" id="searchProduct" />
+                    </div>
+                    <div id="boxSearch2" class="input-group col-12 col-xl-5">
+                        <input type="text" class="form-control rounded" placeholder="Thêm bằng mã vạch"
+                            aria-label="addByBarcode" aria-describedby="search-addon" id="barcodeToAdd" />
+
+                        <button class="btn btn-success" id="addByBarcode" style="margin-left: 10px;">Thêm</button>
+                    </div>
+                </div>
+                <div id="boxContent" class="row" style="margin-top: 20px;">
+                    <!-- <div id="boxLeft" class="col-md-9 col-6"></div> -->
+                    <div id="boxProducts" class="col-7 scrollListProduct">
+                        <table id="tblBillProduct" class="tblProducts table table-hover" data-hasblockrows="1">
+                            <thead>
+                                <tr>
+                                    <th>Mã vạch</th>
+                                    <th>Sản Phẩm</th>
+                                    <th>Đơn Giá</th>
+                                    <th>Loại</th>
+                                    <th>Kho</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody class="scrollProduct" id="listProduct">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="boxPayment" class="col-md-5 col-6 scrollProduct">
+                        <div class="form">
+                            <h4>Danh sách chọn</h4>
+                            <table id="tblBillProduct" class="tblProducts table table-hover" data-hasblockrows="1">
+                                <thead>
+                                    <tr>
+                                        <th>Sản Phẩm</th>
+                                        <th>Đơn Giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Tổng</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollProduct" id="cart">
+
+
+
+                                </tbody>
+                            </table>
+                            <hr>
+
+                            <div class="form-group mb-0 row" id="boxDiscountContainer" style="margin-top: 5px;">
+                                <div class="col-6">
+                                    <h5 class="col-form-label pb-0">
+                                        Tiền Khách đưa
+                                    </h5>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <div class="input-group">
+                                        <input type="text"
+                                            class="form-control textLarge changeInfoPayment hasAddOn text-right autoNumericDecimal"
+                                            id="manualDiscount" autocomplete="new-password"
+                                            oninput="validateNumberInput(this)" value="0 đ">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0 row" style="margin-top: 5px;">
+                                <h5 class="col-6 control-label font-weight-semibold col-form-label"
+                                    style="font-size: 1.0625rem;" id="remainMoneyPositive">Tiền thừa</h5>
+                                <span class="col-6 text-right textLarge moneyHightlight text-success" id="remainMoney"
+                                    data-money="0">0 đ</span>
+                            </div>
+                            <div class="form-group row mb-0">
+                                <div class="col-6">
+                                    <h5 class="col-form-label font-weight-semibold pb-0" style="font-size: 1.0625rem;">
+                                        Tổng tiền
+                                    </h5>
+                                </div>
+                                <p class="col-6 text-right textLarge pt-1 totalProductMoney" id="totalPrice">0 đ</p>
+                            </div>
+                            <div class="form-group mt-3" id="wrapBtnSave">
+                                <div class="btn-group w-100">
+                                    <button type="button" class="btn btn-success btn-lg" id="btnSaveBill"
+                                        style="width: 80%;">
+                                        Lưu hóa Đơn
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="boxCustomer" class="col-12 col-xl-12">
+                        <div
+                            class="card-header pt-0 pl-2 pb-0 bg-white header-elements-sm-inline d-flex align-items-center">
+                            <ul class="nav nav-tabs nav-tabs-highlight card-header-tabs mb-0">
+                                <li class="nav-item" role="presentation">
+                                    <div class="nav-link active cursor-pointer" data-target="#wrapInfoCustomer"
+                                        data-toggle="tab" role="tab" aria-selected="true">
+                                        Khách hàng
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class=" card-body tab-content py-2">
+
+                            <div class="form" action="">
+                                <div id="wrapInfoCustomer" class="tab-pane fade active show" style>
+                                    <div class="row">
+                                        <div class="col-md-6 col-12">
+                                            <div class="input-group mb-2">
+                                                <input type="text" class="form-control customerInfo"
+                                                    placeholder="Điện thoại" data-startsuggest="6" id="phoneNumber"
+                                                    autocomplete="new-password">
+                                            </div>
+                                            <div class="input-group mb-2">
+                                                <input type="text" class="form-control customerInfo" id="fullName"
+                                                    placeholder="Tên khách" autocomplete="new-password">
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-md-6 col-12" data-select2-id="101">
+
+                                            <div class="input-group">
+                                                <textarea rows="2" class="form-control txtAutoHeight customerInfo"
+                                                    placeholder="Địa chỉ" id="address"></textarea>
+                                            </div>
+                                            <input type="hidden" id="customerId" value="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="deleteModal"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Đổi mật khẩu</h5>
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> -->
+                </div>
+                <div class="modal-body" id="bodyChangePasswordModal">
+                    <div class="form-group">
+                        <label for="newPsw">Mật khẩu mới</label>
+                        <input class="form-control" id="newPassword" type="password"
+                            placeholder="Vui lòng nhập mật khẩu mới" />
+                    </div>
+                    <div class="form-group">
+                        <label for="conformPsw">Nhập lại mật khẩu mới</label>
+                        <input class="form-control" id="confirmNewPassword" type="password"
+                            placeholder="Nhập lại mật khẩu mới" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button> -->
+                    <button type="butoon" class="btn btn-danger" onclick="checkChangePassword()">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p style="height: 50px;"></p>
+
+    <div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="editStaff" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img src="https://png.pngtree.com/png-clipart/20191122/original/pngtree-stack-of-dollar-bills-icon-simple-style-png-image_5172278.jpg"
+                        width="50px" height="auto" alt="" srcset="">
+                    <h3 class="modal-title" id="exampleModalLabel" style="margin-left: 15px;">Invoice</h3>
+                    <button id="closeModalBtn" type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        <address>
+                            <h5>Thông tin người mua:</h5>
+                            <p id="buyerName"></p>
+                            <p id="buyerPhone"></p>
+                            <p id="buyerAddress"></p>
+                        </address>
+                    </div>
+                </div>
+                <hr width="100%">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" style="margin-left: 20px;"><strong>Sản phẩm</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-condensed">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <td><strong>Tên</strong></td>
+                                        <td><strong>Giá</strong></td>
+                                        <td><strong>Số lượng</strong></td>
+                                        <td><strong>Tổng</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody id="productListBill">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+
+<script src="../public/js/customerAPI.js"></script>
+<script src="../public/js/saleAPI.js"></script>
+<script src="../public/js/authAPI.js"></script>
+
+
+<script>
+    const csrfToken = "<%=locals.csrfToken%>";
+    var listCart = [];
+    var totalPrice = 0;
+    var isNewCustomer = true;
+    $(function () {
+        $("body").on("click", "#btnSaveBill", async function (e) {
+            checkValidBill();
+        })
+
+        $("body").on("click", "#changePassword", async function (e) {
+            $("#changePasswordModal").modal("show");
+        })
+
+        $('#phoneNumber').keyup(e => {
+            $('#fullName').val("");
+            $('#address').val("");
+            $('#customerId').val("");
+            getCustomerByPhone($('#phoneNumber').val())
+        })
+
+        $('#searchProduct').keyup(e => {
+            if ($('#searchProduct').val() != "") {
+                getProductListByName($('#searchProduct').val());
+            } else {
+                $("#listProduct").html(" ")
+            }
+        })
+
+
+        $("body").on("change", "#manualDiscount", function (e) {
+            $('#manualDiscount').val(formatPrice($('#manualDiscount').val()));
+            updateremainMoney();
+        })
+
+
+        $("body").on("change", ".quantityCartItem", function (e) {
+            const barcode = $(this).closest('tr').find("#barcodeCartItem").val();
+            for (let i = 0; i < listCart.length; i++) {
+                if (listCart[i].barcode === barcode) {
+                    if (listCart[i].inventory < parseInt($(this).val())) {
+                        $(this).val(listCart[i].inventory);
+                        showNotification("Không đủ số lượng.");
+                        break;
+                    }
+                    listCart[i].quantity = parseInt($(this).val());
+                    break;
+                }
+            }
+            updateCart();
+        })
+
+        $("body").on("click", "#deleteCartItem", function (e) {
+            const barcode = $(this).closest('tr').find("#barcodeCartItem").val();
+            for (let i = 0; i < listCart.length; i++) {
+                if (listCart[i].barcode === barcode) {
+                    listCart.splice(i, 1);
+                    break;
+                }
+            }
+            updateCart();
+        })
+
+
+        $("body").on("click", "#addToOrderList", function (e) {
+            const tmp = $(e.target).closest('tr');
+            var id = tmp.find("#productID").val();
+            var name = tmp.find("#productName").html();
+            var price = tmp.find("#productPrice").html();
+            var barcode = tmp.find("#barcode").html();
+            var inventory = tmp.find("#productInventory").html();
+            if (inventory == 0) {
+                showNotification("Sản phẩm đã hết.");
+            } else {
+                const cartItems = {
+                    _id: id,
+                    barcode: barcode,
+                    productName: name,
+                    retailPrice: price,
+                    quantity: 1,
+                    inventory: inventory
+                }
+
+                let isItemInCart = false;
+
+                for (let i = 0; i < listCart.length; i++) {
+                    if (listCart[i].barcode === cartItems.barcode) {
+                        if (listCart[i].quantity == inventory) {
+                            showNotification("Không đủ số lượng.");
+                            isItemInCart = true;
+                            break;
+                        }
+                        listCart[i].quantity += 1;
+                        isItemInCart = true;
+                        break;
+                    }
+                }
+
+                if (!isItemInCart) {
+                    listCart.push(cartItems);
+                }
+
+                updateCart();
+            }
+
+        });
+
+        $("body").on("click", "#addByBarcode", async function (e) {
+            const barcode = $('#barcodeToAdd').val();
+            if (barcode) {
+                await addToCartByBarcode(barcode);
+            }
+        })
+
+    });
+
+    function formatPrice(price) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+    }
+
+    function updateCart() {
+        updateTotalPrice();
+        updateremainMoney();
+        var data = "";
+        listCart.forEach(cartItems => {
+            data +=
+                `<tr>` +
+                `<td value="productName">${cartItems.productName}</td>` +
+                `<td value="DonGia">${cartItems.retailPrice}</td>` +
+                `<td value="SoLuong"><input  class="quantityCartItem" type="number" oninput="validateNonNegativeInput(this)" value="${cartItems.quantity}" style="width: 60px;"/>` +
+                `<input type="hidden" id="barcodeCartItem" value="${cartItems.barcode}"/></td>` +
+                `<td value="Tong" id="total">${formatPrice(parseInt(cartItems.retailPrice.replace(/[^\d]/g, '')) * cartItems.quantity)}</td>` +
+                `<td>` +
+                `<button class="btn btn-danger" id="deleteCartItem" >Xóa</button>` +
+                `</td>` +
+                `</tr>` +
+                `</tr>`;
+        })
+        $('#cart').html(data);
+
+    }
+
+    function updateTotalPrice() {
+        totalPrice = 0;
+        for (let i = 0; i < listCart.length; i++) {
+            totalPrice += parseInt(listCart[i].retailPrice.replace(/[^\d]/g, '')) * listCart[i].quantity;
+        }
+        $('#totalPrice').html(formatPrice(totalPrice));
+    }
+
+    function validateNumberInput(inputElement) {
+        inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
+    }
+
+    function validateNonNegativeInput(inputElement) {
+        var inputValue = parseFloat(inputElement.value);
+        if (inputValue < 0) {
+            inputElement.value = 0;
+        }
+    }
+
+    function updateremainMoney() {
+        $('#remainMoney').html(formatPrice(parseInt($('#manualDiscount').val().replace(/[^\d]/g, '')) - totalPrice))
+    }
+
+    function showNotification(message) {
+        $("#myNotification").html(message);
+        $("#myNotification").show();
+        setTimeout(function () {
+            $("#myNotification").hide();
+        }, 2000);
+    }
+
+    async function checkValidBill() {
+        if (listCart.length > 0) {
+            if ($('#fullName').val() == "" || $('#address').val() == "" || $('#phoneNumber').val() == "") {
+                showNotification("Vui lòng nhập đủ thông tin khách hàng.");
+            }
+            else if ($('#phoneNumber').val().length > 13 || $('#phoneNumber').val().length < 8) {
+                showNotification("Số điện thoại không hợp lệ.");
+            }
+            else if (parseInt($('#manualDiscount').val().replace(/[^\d]/g, '')) < totalPrice) {
+                showNotification("Không đủ tiền thanh toán.");
+            } else {
+                if (isNewCustomer) {
+                    const customer = {
+                        phoneNumber: $('#phoneNumber').val(),
+                        fullName: $('#fullName').val(),
+                        address: $('#address').val(),
+                    }
+                    await createCustomer(customer)
+                } else {
+                    const customer = {
+                        _id: $('#customerId').val(),
+                        phoneNumber: $('#phoneNumber').val(),
+                        fullName: $('#fullName').val(),
+                        address: $('#address').val(),
+                    }
+                    await updateCustomer(customer)
+                    createBill();
+                }
+            }
+        } else {
+            showNotification("Giỏ hàng đang trống.");
+        }
+    }
+
+    document.getElementById('closeModalBtn').addEventListener('click', function () {
+        var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+        myModal.hide();
+        location.reload();
+    });
+
+    function checkChangePassword() {
+        var newPassword = $('#newPassword').val();
+        var confirmNewPassword = $('#confirmNewPassword').val();
+        if (newPassword != confirmNewPassword) {
+            showNotification("Xác nhận mật khẩu không đúng!")
+        }
+        else if (newPassword.length < 5) {
+            showNotification("Đặt mật khẩu dài xíu nhe!")
+        }
+        else {
+            $('#changePasswordModal').hide();
+            $('.modal-backdrop').hide();
+            changePassword(newPassword);
+        }
+    }
+
+    function createBill() {
+        console.log(listCart);
+        var product = []
+        listCart.forEach(cartItem => {
+            product.push({
+                productId: cartItem._id,
+                quantity: cartItem.quantity,
+                totalPrice: parseInt(cartItem.retailPrice.replace(/[^\d]/g, '')) * cartItem.quantity
+            })
+        })
+
+        const order = {
+            saleId: "<%= user._id %>",
+            customerId: $("#customerId").val(),
+            products: product,
+            totalAmount: totalPrice,
+            moneyReceived: parseInt($('#manualDiscount').val().replace(/[^\d]/g, '')),
+            moneyBack: parseInt($('#remainMoney').html().replace(/[^\d]/g, '')),
+        }
+
+        console.log(order);
+
+        createOrder(order)
+
+        $("#myModal").modal("show");
+        $('.modal-backdrop').show();
+        $("#buyerName").html("Họ và tên: " + $('#fullName').val());
+        $("#buyerPhone").html("Số điện thoại: " + $('#phoneNumber').val());
+        $("#buyerAddress").html("Địa chỉ: " + $('#address').val());
+
+        var data = ""
+        listCart.forEach(product => {
+            totalPrice = parseInt(product.retailPrice.replace(/[^\d]/g, '')) * product.quantity
+            data += `<tr>` +
+                `<td>${product.productName}</td>` +
+                `<td>${parseInt(product.retailPrice.replace(/[^\d]/g, ''))}</td>` +
+                `<td value="type">${product.quantity}</td>` +
+                `<td value="kho" id="productInventory">${totalPrice}</td>` +
+                `<tr>`
+        })
+
+        console.log(data);
+
+        data += `<tr>` +
+            `<td></td>` +
+            `<td></td>` +
+            `<td><strong>Tổng tiền:</strong></td>` +
+            `<td>${order.totalAmount}</td>` +
+            `</tr>` +
+            `<tr>` +
+            `<td></td>` +
+            `<td></td>` +
+            `<td><strong>Tiền nhận:</strong></td>` +
+            `<td>${order.moneyReceived}</td>` +
+            `</tr>` +
+            `<tr>` +
+            `<td></td>` +
+            `<td></td>` +
+            `<td><strong>Hoàn lại:</strong></td>` +
+            `<td>${order.moneyBack}</td>` +
+            `</tr>`
+
+
+        $('#productListBill').html(data)
+    }
+</script>
+
+</html>

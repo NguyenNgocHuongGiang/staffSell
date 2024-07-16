@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Quản lí sản phẩm</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../public/css/notifcation.css" type="text/css" />
+
+</head>
+
+<body class="">
+    <div id="myNotification">thông báo!</div>
+    <header>
+        <nav class=" navbar navbar-expand-lg fixed-top navHeader navbar-dark bg-dark" style="background-color: black !important;">
+            <div class="container">
+                <a class="navbar-brand logo" href="/"><span class="text-warning">SELL</span>PHONE</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="/">Nhân viên</a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/product">Sản phẩm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/customer">Khách hàng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/report">Báo cáo</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <ul class="navbar-nav">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle nameUser" data-toggle="dropdown" href="#"
+                            style="color: rgb(249, 249, 249); list-style: none;" id="userEmail">
+                            <%= user.email %>
+                                <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" style="padding: 20px;">
+                            <li id="profileUser"><a href="/profile" style="color: black; list-style: none;">Tài
+                                    khoản</a></li>
+                            <li><a href="/logout" style="color: black; list-style: none;">Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container" style="margin-top: 80px;">
+        <h1 style="margin-top: 20px;">Danh sách sản phẩm</h1>
+        <section id="content__top">
+            <button class="btn btn-success" style="margin-bottom: 20px;" data-toggle="modal"
+                data-target="#addProduct">Thêm
+                sản phẩm</button>
+        </section>
+        <section id="content__bottom">
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <div class="card mb-4">
+                            <table id="" class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Mã vạch</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Giá gốc</th>
+                                        <th>Giá bán</th>
+                                        <th>Loại</th>
+                                        <th>Tồn kho</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listProduct">
+
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal fade" id="addProduct" tabindex="-1" role="dialog" aria-labelledby="addProduct" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thêm sản phẩm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" class="container">
+                        <div class="form-group">
+                            <label for="barcodeAdd">Mã vạch:</label>
+                            <input type="text" class="form-control" id="barcodeAdd" placeholder="Nhập mã vạch"
+                                name="barcodeAdd" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="productNameAdd">Tên sản phẩm:</label>
+                            <input type="text" class="form-control" id="productNameAdd" placeholder="Nhập tên sản phẩm"
+                                name="productNameAdd" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="importPriceAdd">Giá gốc:</label>
+                            <input type="number" class="form-control" id="importPriceAdd" placeholder="Nhập giá gốc"
+                                name="importPriceAdd" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="retailPriceAdd">Giá bán:</label>
+                            <input type="number" class="form-control" id="retailPriceAdd" placeholder="Nhập giá bán ra"
+                                name="retailPriceAdd" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="categoryAdd">Loại:</label>
+                            <select name="categoryAdd" id="categoryAdd" class="form-control">
+                                <option value="">Chọn loại</option>
+                                <option value="iphone">Iphone</option>
+                                <option value="samsung">Samsung</option>
+                                <option value="oppo">Oppo</option>
+                                <option value="phukien">Phụ kiện</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inventoryAdd">Số lượng:</label>
+                            <input type="number" class="form-control" id="inventoryAdd" placeholder="Nhập số lượng nhập"
+                                name="inventoryAdd" value="">
+                        </div>
+                        <div class="form-group">
+                            <div class="alert alert-danger alert-dismissible fade show" id="addWarning"
+                                style="display: none;">
+                            </div>
+                        </div>
+                        <div style="margin-top: 30px;">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success" onclick="checkAddProduct()">Thêm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="deleteProduct" tabindex="-1" role="dialog" aria-labelledby="deleteProduct"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Xóa sản phẩm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="bodyDeleteModal">
+                    <p>Bạn có chắc muốn xóa sản phẩm này ?</p>
+                </div>
+                <input type="hidden" id="barcodeDelete"></input>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="butoon" class="btn btn-danger" onclick=deleteProduct()
+                        data-dismiss="modal">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editProduct" tabindex="-1" role="dialog" aria-labelledby="editProduct"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cập nhật sản phẩm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" class="container">
+                        <div class="form-group">
+                            <label for="barcodeEdit">Mã vạch:</label>
+                            <input type="text" class="form-control" id="barcodeEdit" placeholder="" name="barcodeEdit"
+                                value="" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="productNameEdit">Tên sản phẩm:</label>
+                            <input type="text" class="form-control" id="productNameEdit" placeholder=""
+                                name="productNameEdit" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="importPriceEdit">Giá gốc:</label>
+                            <input type="number" class="form-control" id="importPriceEdit" placeholder=""
+                                name="importPriceEdit" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="retailPriceEdit">Giá bán:</label>
+                            <input type="number" class="form-control" id="retailPriceEdit" placeholder=""
+                                name="retailPriceEdit" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="categoryEdit">Loại:</label>
+                            <select name="categoryEdit" id="categoryEdit" class="form-control">
+                                <option value="">Chọn loại</option>
+                                <option value="iphone">Iphone</option>
+                                <option value="samsung">Samsung</option>
+                                <option value="oppo">Oppo</option>
+                                <option value="phukien">Phụ kiện</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inventoryEdit">Tồn kho:</label>
+                            <input type="number" class="form-control" id="inventoryEdit" placeholder=""
+                                name="inventoryEdit" value="">
+                        </div>
+                        <div style="margin-top: 30px;">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success" onclick="checkEdit()">Cập nhật</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <%- include('./include/lib') -%>
+
+        <script src="../public/js/productAPI.js"></script>
+
+        <script>
+            const csrfToken = "<%=locals.csrfToken%>";
+            const role = "ADMIN";
+            $(function () {
+                getProductList();
+
+                $("body").on("click", "#deleteButton", function (e) {
+                    var barcode = $(e.target).closest('tr').find("#barcode").html();
+                    $("#bodyDeleteModal").html(`<p>Bạn có chắc muốn xóa sản phẩm <b>${barcode} </b>này ?</p>`)
+                    $('#barcodeDelete').val(barcode);
+                });
+
+                $("body").on("click", "#editButton", function (e) {
+                    $('#editProduct').show();
+                    var barcode = $(e.target).closest('tr').find("#barcode").html();
+                    console.log(barcode);
+                    getOneProductByBarcode(barcode);
+                });
+            });
+
+            function checkEdit() {
+                dataUpdate = {
+                    barcode: $('#barcodeEdit').val(),
+                    productName: $('#productNameEdit').val(),
+                    importPrice: $('#importPriceEdit').val(),
+                    retailPrice: $('#retailPriceEdit').val(),
+                    category: $('#categoryEdit').val(),
+                    inventory: $('#inventoryEdit').val(),
+                }
+                $('#editProduct').hide();
+                $('.modal-backdrop').hide();
+                console.log(dataUpdate)
+                updateProduct(dataUpdate);
+            }
+
+            function showNotification(message) {
+                $("#myNotification").html(message);
+                $("#myNotification").show();
+                setTimeout(function () {
+                    $("#myNotification").hide();
+                }, 2000);
+            }
+
+            function showAlert(message) {
+                $("#addWarning").html(message)
+                $("#addWarning").show()
+                setTimeout(function () {
+                    $("#addWarning").hide();
+                }, 2000);
+            }
+
+            function checkAddProduct() {
+                const product = {
+                    barcode: $('#barcodeAdd').val(),
+                    productName: $('#productNameAdd').val(),
+                    importPrice: $('#importPriceAdd').val(),
+                    retailPrice: $('#retailPriceAdd').val(),
+                    category: $('#categoryAdd').val(),
+                    inventory: $('#inventoryAdd').val(),
+                }
+                if (product.barcode.trim() == "" || product.productName.trim() == "" || product.importPrice.trim() == "" || product.retailPrice.trim() == "" || product.category.trim() == "" || product.inventory.trim() == "") {
+                    showAlert("Vui lòng nhập đủ thông tin!");
+                }
+                else {
+                    $('#barcodeAdd').val("");
+                    $('#productNameAdd').val("");
+                    $('#importPriceAdd').val("");
+                    $('#retailPriceAdd').val("");
+                    $('#categoryAdd').val("");
+                    $('#inventoryAdd').val("");
+                    $('#addProduct').hide();
+                    $('.modal-backdrop').hide();
+                    createProduct(product);
+                }
+            }
+
+        </script>
+
+</body>
+
+</html>
